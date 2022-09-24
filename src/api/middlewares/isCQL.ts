@@ -14,8 +14,7 @@ const isCQL = (): Middleware => async (ctx, next) => {
     return null;
   }
 
-  next();
-  return null;
+  return next();
 };
 
 export default isCQL;
