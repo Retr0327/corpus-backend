@@ -1,0 +1,27 @@
+# git
+.git
+.gitignore
+.husky
+
+# github
+LICENSE
+README.md
+
+# TypeScript cache
+*.tsbuildinfo
+
+# node
+node_modules
+dist
+
+# docker
+Dockerfile*
+
+# eslint
+.eslint*
+
+# prettier
+.prettier*
+
+# misc
+.DS_Store
