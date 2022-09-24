@@ -1,0 +1,18 @@
+FROM node:16-bullseye
+
+RUN apt-get update && apt -y upgrade 
+
+RUN apt-get install -y build-essential && apt-get clean
+
+RUN npm install -g pnpm
+
+RUN pnpm config set auto-install-peers true
+
+WORKDIR /app
+
+COPY package.json /app
+COPY pnpm-lock.yaml /app
+
+RUN pnpm i
+
+COPY . /app
