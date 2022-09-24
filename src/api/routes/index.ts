@@ -1,14 +1,22 @@
 import { PREFIX } from '@configs';
 import Router, { RouterContext } from '@koa/router';
+import corpusRouter from './corpus';
 
-const router = new Router();
+const entry = new Router();
 
-router.prefix(PREFIX);
+entry.prefix(PREFIX);
 
-router.get('/', (ctx: RouterContext) => {
+entry.get('/', (ctx: RouterContext) => {
   const ip = ctx.request.ip.replace('::ffff:', '');
   ctx.status = 200;
   ctx.body = { status: 'success', ip };
 });
 
-export default router;
+const routers = [corpusRouter];
+
+routers.forEach((router) => {
+  entry.use(router.routes());
+  entry.use(router.allowedMethods());
+});
+
+export default entry;
