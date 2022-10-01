@@ -1,9 +1,8 @@
 import Koa from 'koa';
 import router from '@routes';
-import cors from '@koa/cors';
 import koaEtag from 'koa-etag';
 import morgan from 'koa-morgan';
-import { corsConfig } from '@configs';
+import cors from '@middlewares/cors';
 import bodyParser from 'koa-bodyparser';
 import customDevFormat from '@utils/logger';
 import koaConditionalGet from 'koa-conditional-get';
@@ -25,7 +24,7 @@ app.use(async (ctx, next) => {
 
 app.use(koaConditionalGet());
 app.use(koaEtag());
-app.use(cors(corsConfig));
+app.use(cors());
 app.use(bodyParser());
 
 app.use(router.routes());
