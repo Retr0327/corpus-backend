@@ -1,15 +1,18 @@
 import { Options } from '@koa/cors';
 
-const corsConfig: Options = {
+const corsOptions: Options = {
   origin: (ctx) => {
-    const allowList = ['http://localhost:3001', 'http://localhost:3002'];
+    const allowList = [/http:\/\/localhost:300\d$/];
     const origin = ctx.request.header.origin ?? '';
-    if (allowList.includes(origin)) {
+    const allowed = allowList.some((value) => new RegExp(value).test(origin));
+
+    if (allowed) {
       return origin;
     }
+
     return '';
   },
   credentials: true,
 };
 
-export default corsConfig;
+export default corsOptions;
