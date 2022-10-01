@@ -10,6 +10,12 @@ const buildParams =
     const { word, cqlEnable, media, postType, boards, start, end, page, fetchNumber, windowSize } =
       ctx.request.body as CorpusRequest;
 
+    if (Number(end) > Number(start)) {
+      ctx.status = 422;
+      ctx.body = { status: 'failed', msg: 'starting year must not be later than the ending year' };
+      return null;
+    }
+
     const textPattern = buildTextPattern(cqlEnable, word, postType);
     const filterString = buildFilterString(media, boards, start, end);
 
