@@ -5,6 +5,7 @@ import morgan from 'koa-morgan';
 import cors from '@middlewares/cors';
 import bodyParser from 'koa-bodyparser';
 import customDevFormat from '@utils/logger';
+import handleError from '@middlewares/error';
 import koaConditionalGet from 'koa-conditional-get';
 
 morgan.format('custom-dev', customDevFormat);
@@ -12,16 +13,7 @@ morgan.format('custom-dev', customDevFormat);
 const app = new Koa();
 
 app.use(morgan('custom-dev'));
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
-    ctx.body = { status: 'failed' };
-  }
-});
-
+app.use(handleError());
 app.use(koaConditionalGet());
 app.use(koaEtag());
 app.use(cors());
