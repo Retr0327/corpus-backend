@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { isCQL, buildParams } from '@middlewares';
+import { isCQL, buildParams } from '@middlewares/corpus';
 import { handleQuery, handleCSVDownload } from '@controllers';
 import { validateQuery, validateCSVDownload } from '@validations/blacklab';
 
