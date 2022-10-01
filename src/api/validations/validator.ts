@@ -5,7 +5,7 @@ function validate<T>(schema: SchemaOf<T>): Middleware {
   return async (ctx, next) => {
     try {
       await schema.validate(ctx.request.body);
-      return await next();
+      return next(); // eslint-disable-line @typescript-eslint/return-await
     } catch (error) {
       const errors = error as ValidationError;
       console.log(errors); // eslint-disable-line no-console
