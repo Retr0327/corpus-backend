@@ -36,7 +36,7 @@ const buildParams =
       default:
         requestBody = {
           outputformat: 'json',
-          first: (page * fetchNumber).toString(),
+          first: (page * fetchNumber - fetchNumber).toString(),
           number: fetchNumber.toString(),
           wordsaroundhit: windowSize,
           ...requestBody,
