@@ -36,7 +36,7 @@
       "@configs": ["src/api/configs/index.ts"],
       "@utils/*": ["src/api/utils/*"],
       "@routes": ["src/api/routes/index.ts"],
-      "@models": ["src/api/models/index.ts"],
+      "@models/*": ["src/api/models/*"],
       "types": ["src/api/types.ts"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
