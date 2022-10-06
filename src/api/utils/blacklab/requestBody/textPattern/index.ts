@@ -9,6 +9,8 @@ const postTypeFactories: PostTypeFactories = {
   commentNeg: ' within <comment c_type="neg"/>',
   commentNeu: ' within <comment c_type="neu"/>',
   commentAll: ' within <comment/>',
+  commentFemale: ' within <comment c_gender="F"/>',
+  commentMale: ' within <comment c_gender="M"/>',
 };
 
 function buildTextPattern(cqlEnable: boolean, word: string, postType: PostType) {
