@@ -17,8 +17,9 @@ const handleGetBoards: Middleware = async (ctx) => {
     dcard: generateBoards(allBoards, isDcard),
   };
 
+  const cachedData = JSON.stringify(data);
   const ttl = setExpireDate(1);
-  redis.multi().hset('boards', data).expire('boards', ttl).exec();
+  redis.multi().set('boards', cachedData).expire('boards', ttl).exec();
 
   ctx.status = 200;
   ctx.body = { status: 'success', data };
