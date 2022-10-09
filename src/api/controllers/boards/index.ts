@@ -1,23 +1,27 @@
 import { Boards } from 'types';
+import redis from '@models/redis';
+import setExpireDate from '@utils/redis';
 import { Middleware } from '@koa/router';
 import request from '@utils/blacklab/request';
 import generateBoards from './utils';
 
 const handleGetBoards: Middleware = async (ctx) => {
   const response = await request<Boards>('fields/board?outputformat=json');
-  const boards = Object.keys(response.fieldValues);
+  const allBoards = Object.keys(response.fieldValues);
 
   const isDcard = /.*(?=-dcard)/;
   const isPtt = /.*(?=-ptt)/;
 
-  ctx.status = 200;
-  ctx.body = {
-    status: 'success',
-    data: {
-      ptt: generateBoards(boards, isPtt),
-      dcard: generateBoards(boards, isDcard),
-    },
+  const data = {
+    ptt: generateBoards(allBoards, isPtt),
+    dcard: generateBoards(allBoards, isDcard),
   };
+
+  const ttl = setExpireDate(1);
+  redis.multi().hset('boards', data).expire('boards', ttl).exec();
+
+  ctx.status = 200;
+  ctx.body = { status: 'success', data };
 };
 
 export default handleGetBoards;
