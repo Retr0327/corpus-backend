@@ -1,4 +1,11 @@
-export type PostType = 'title' | 'body' | 'commentAll' | 'commentPos' | 'commentNeu' | 'commentNeg';
+export type PostType =
+  | 'title'
+  | 'body'
+  | 'commentAll'
+  | 'commentPos'
+  | 'commentNeu'
+  | 'commentNeg'
+  | '';
 
 export type CorpusRequest = {
   word: string;
