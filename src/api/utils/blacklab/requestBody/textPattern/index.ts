@@ -3,6 +3,7 @@ import { PostType } from 'types';
 type PostTypeFactories = { [key in PostType as string]: string };
 
 const postTypeFactories: PostTypeFactories = {
+  all: '',
   title: ' within <title/>',
   body: ' within <body/>',
   commentPos: ' within <comment c_type="pos"/>',
