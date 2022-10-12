@@ -5,7 +5,7 @@ export type PostType =
   | 'commentPos'
   | 'commentNeu'
   | 'commentNeg'
-  | '';
+  | 'all';
 
 export type CorpusRequest = {
   word: string;
