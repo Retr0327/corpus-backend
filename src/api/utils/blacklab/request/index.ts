@@ -13,8 +13,12 @@ async function request<T>(blacklabParams: string) {
     },
   };
 
-  const response = await axios(requestConfig);
-  return response.data as unknown as T;
+  try {
+    const response = await axios(requestConfig);
+    return response.data as unknown as T;
+  } catch (error) {
+    return false;
+  }
 }
 
 export default request;
