@@ -1,4 +1,4 @@
-import { PREFIX } from '@configs';
+import { PREFIX } from '@config';
 import Router, { RouterContext } from '@koa/router';
 import corpusRouter from './corpus';
 
