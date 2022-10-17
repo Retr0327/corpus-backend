@@ -7,6 +7,13 @@ import generateBoards from './utils';
 
 const handleGetBoards: Middleware = async (ctx) => {
   const response = await request<Boards>('fields/board?outputformat=json');
+
+  if (!response) {
+    ctx.status = 500;
+    ctx.body = { status: 'failed', msg: 'internal server error' };
+    return;
+  }
+
   const allBoards = Object.keys(response.fieldValues);
 
   const isDcard = /.*(?=-dcard)/;
