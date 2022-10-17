@@ -1,3 +1,12 @@
+import { DefaultContext, Request } from 'koa';
+
+type NonNullable<T> = Exclude<T, null | undefined>;
+
+export type RequestBody<T extends NonNullable<Request['body']>> =
+  | {
+      request: { body: T };
+    } & DefaultContext;
+
 export type PostType =
   | 'title'
   | 'body'
