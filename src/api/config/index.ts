@@ -1,6 +1,6 @@
 const isProduction = process.env.NODE_ENV === 'production';
 
-const PREFIX = isProduction ? '/api' : '/';
+const PREFIX = isProduction ? '/' : '/api';
 
 const BLACKLAB_URL = isProduction
   ? 'http://blacklab/blacklab-server/indexes/'
