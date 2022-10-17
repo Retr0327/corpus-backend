@@ -9,7 +9,7 @@ const isCQL = (): Middleware => async (ctx, next) => {
   const invalidCQLQuery = cqlEnable === true && !cqlSyntax.test(word);
 
   if (invalidQuery || invalidCQLQuery) {
-    ctx.status = 422;
+    ctx.status = 400;
     ctx.body = { status: 'failed', msg: 'syntax error in CorpusQL pattern' };
     return null;
   }
