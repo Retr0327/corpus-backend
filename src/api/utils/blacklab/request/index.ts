@@ -1,4 +1,4 @@
-import { BLACKLAB_URL } from '@configs';
+import { BLACKLAB_URL } from '@config';
 import axios, { AxiosRequestConfig } from 'axios';
 
 async function request<T>(blacklabParams: string) {
