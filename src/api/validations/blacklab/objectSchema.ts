@@ -4,7 +4,7 @@ const objectSchema = {
   word: string().required(),
   media: string().nullable(),
   cqlEnable: boolean().required(),
-  postType: string().required(),
+  postType: string().nullable(),
   boards: string().nullable(),
   start: string().required(),
   end: string().required(),
