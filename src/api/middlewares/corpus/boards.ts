@@ -1,7 +1,7 @@
 import redis from '@models/redis';
 import { Middleware } from '@koa/router';
 
-const hasBoards = (): Middleware => async (ctx, next) => {
+const hasBoards: Middleware = async (ctx, next) => {
   const result = await redis.get('boards');
 
   if (result === null) {
