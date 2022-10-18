@@ -1,3 +1,4 @@
 import buildFilterString from './filter';
+import buildTextPattern from './textPattern';
 
-export default buildFilterString;
+export { buildTextPattern, buildFilterString };
