@@ -23,5 +23,8 @@ Dockerfile*
 # prettier
 .prettier*
 
+# blacklab server
+blacklabServer/
+
 # misc
 .DS_Store
