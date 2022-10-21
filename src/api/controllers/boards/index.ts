@@ -2,19 +2,19 @@ import { Boards } from 'types';
 import redis from '@models/redis';
 import setExpireDate from '@utils/redis';
 import { Middleware } from '@koa/router';
-import request from '@utils/blacklab/request';
+import request from '@utils/blacklab';
 import generateBoards from './utils';
 
 const handleGetBoards: Middleware = async (ctx) => {
-  const response = await request<Boards>('fields/board?outputformat=json');
+  const [result, error] = await request<Boards>('fields/board?outputformat=json');
 
-  if (!response) {
+  if (result === null || error) {
     ctx.status = 500;
     ctx.body = { status: 'failed', msg: 'internal server error' };
     return;
   }
 
-  const allBoards = Object.keys(response.fieldValues);
+  const allBoards = Object.keys(result.fieldValues);
 
   const isDcard = /.*(?=-dcard)/;
   const isPtt = /.*(?=-ptt)/;
