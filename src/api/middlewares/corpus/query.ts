@@ -1,8 +1,8 @@
 import redis from '@models/redis';
 import { Middleware } from '@koa/router';
 
-const hasQueryResult = (): Middleware => async (ctx, next) => {
-  const { blacklabReuqestBody } = ctx;
+const hasQueryResult: Middleware = async (ctx, next) => {
+  const { blacklabReuqestBody } = ctx.state;
   const blacklabParams = new URLSearchParams(blacklabReuqestBody).toString();
   const result = await redis.hgetall(blacklabParams);
 
