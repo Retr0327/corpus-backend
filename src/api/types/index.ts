@@ -7,20 +7,13 @@ export type RequestBody<T extends NonNullable<Request['body']>> =
       request: { body: T };
     } & DefaultContext;
 
-export type PostType =
-  | 'title'
-  | 'body'
-  | 'commentAll'
-  | 'commentPos'
-  | 'commentNeu'
-  | 'commentNeg'
-  | 'all';
+export type PostType = 'title' | 'body' | 'commentAll' | 'commentPos' | 'commentNeu' | 'commentNeg';
 
 export type CorpusRequest = {
   word: string;
   cqlEnable: boolean;
   media: string | null;
-  postType: PostType;
+  postType: PostType | null;
   boards: string | null;
   start: string;
   end: string;
