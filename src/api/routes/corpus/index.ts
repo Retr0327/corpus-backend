@@ -9,8 +9,8 @@ const router = new Router({ prefix: '/corpus' });
 
 router.use(isCQL());
 
-router.post('/', validateQuery, buildParams('query'), hasQueryResult(), handleQuery);
+router.post('/', validateQuery, buildParams('query'), hasQueryResult, handleQuery);
 router.post('/csv', validateCSVDownload, buildParams('csv'), handleCSVDownload);
-router.get('/boards', hasBoards(), handleGetBoards);
+router.get('/boards', hasBoards, handleGetBoards);
 
 export default router;
