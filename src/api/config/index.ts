@@ -1,9 +1,9 @@
-const isProduction = process.env.NODE_ENV === 'production';
+const PREFIX = process.env.NODE_ENV === 'production' ? '/' : '/api';
 
-const PREFIX = isProduction ? '/' : '/api';
+const { BLACKLAB_URL } = process.env;
 
-const BLACKLAB_URL = isProduction
-  ? 'http://blacklab/blacklab-server/indexes/'
-  : 'http://blacklab:8080/blacklab-server/indexes/';
+if (!BLACKLAB_URL) {
+  throw new Error('BLACKLAB_URL undefined');
+}
 
 export { PREFIX, BLACKLAB_URL };
