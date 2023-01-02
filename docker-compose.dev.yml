@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      blacklab:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    links:
+      - blacklab
+      - redis
+    command: >
+      bash -c "export REDIS_URL=\"redis://$$(dig +short redis):6379\" &&
+               pnpm run dev
+              "
+
+  client:
+    build:
+      context: ../corpus-frontend
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3001
+    ports:
+      - 3001:3000
+    volumes:
+      - ../corpus-frontend:/app
+      - /app/node_modules
+    links:
+      - api
+    command: bash -c "pnpm run dev"
+
+  blacklab:
+    build:
+      context: ./blacklab
+      dockerfile: Dockerfile
+      target: server
+
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./blacklab/blacklab-indexes:/data/blacklab/indexes
+
+  blacklab-indexer:
+    build:
+      context: ./blacklab
+      dockerfile: Dockerfile
+      target: indexer
+
+    volumes:
+      - ./blacklab/indexer/tei-data:/indexer/tei-data
+      - ./blacklab/blacklab-indexes:/indexer/blacklab-indexes
+
+    command: bash -c "bash indexer.sh"
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - 6378:6379
+    healthcheck:
+      test: 'redis-cli ping'
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
