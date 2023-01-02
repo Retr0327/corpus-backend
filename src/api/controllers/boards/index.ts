@@ -1,35 +1,42 @@
 import { Boards } from 'types';
-import redis from '@models/redis';
-import setExpireDate from '@utils/redis';
+import { hset } from '@utils/redis';
 import { Middleware } from '@koa/router';
-import request from '@utils/blacklab';
+import getCorpusRedisKey from '@utils/redis/keys';
+import { request, generateBlacklabURL } from '@utils/blacklab';
 import generateBoards from './utils';
 
-const handleGetBoards: Middleware = async (ctx) => {
-  const [result, error] = await request<Boards>('fields/board?outputformat=json');
+export async function fetchBoards() {
+  const url = generateBlacklabURL({ kind: 'boards' });
+  const [result, error] = await request<Boards>(url);
+  if (error || !result) return null;
 
-  if (result === null || error) {
-    ctx.status = 500;
-    ctx.body = { status: 'failed', msg: 'internal server error' };
-    return;
-  }
-
-  const allBoards = Object.keys(result.fieldValues);
-
+  const boards = Object.keys(result.fieldValues);
   const isDcard = /.*(?=-dcard)/;
   const isPtt = /.*(?=-ptt)/;
 
-  const data = {
-    ptt: generateBoards(allBoards, isPtt),
-    dcard: generateBoards(allBoards, isDcard),
+  return {
+    ptt: generateBoards(boards, isPtt),
+    dcard: generateBoards(boards, isDcard),
   };
+}
 
-  const cachedData = JSON.stringify(data);
-  const ttl = setExpireDate(1);
-  redis.multi().set('boards', cachedData).expire('boards', ttl).exec();
+const handleGetBoards: Middleware = async (ctx) => {
+  const data = await fetchBoards();
 
-  ctx.status = 200;
-  ctx.body = { status: 'success', data };
+  if (data === null) {
+    ctx.status = 500;
+    ctx.body = { status: 'failed', msg: 'internal server error' };
+    return null;
+  }
+
+  const { type } = ctx.request.query as { type: keyof typeof data | undefined };
+  const redisKey = getCorpusRedisKey({ kind: 'boards' });
+
+  await hset(redisKey, data);
+  const filteredData = type === undefined ? data : { [`${type}`]: data[type] };
+
+  ctx.body = { status: 'success', data: filteredData };
+  return null;
 };
 
 export default handleGetBoards;
