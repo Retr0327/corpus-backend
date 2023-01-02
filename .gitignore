@@ -112,4 +112,4 @@ tmp/
 .DS_store
 
 # blacklab indexes
-blacklabServer/blacklab-indexes/
+blacklab/blacklab-indexes/
