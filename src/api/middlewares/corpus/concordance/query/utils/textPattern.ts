@@ -1,4 +1,4 @@
-import { PostType } from 'types/corpus';
+import { PostType } from 'types';
 
 type PostTypeFactories = { [key in PostType as string]: string };
 
