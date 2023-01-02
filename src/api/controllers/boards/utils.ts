@@ -1,6 +1,9 @@
 function generateBoards(boards: string[], mediaPattern: RegExp) {
-  const filteredBoard = boards.filter((value) => mediaPattern.test(value));
-  return filteredBoard.map((value) => value.match(mediaPattern)![0]);
+  return boards.reduce((acc: string[], cur) => {
+    const match = cur.match(mediaPattern);
+    if (match) acc.push(match[0]);
+    return acc;
+  }, []);
 }
 
 export default generateBoards;
