@@ -9,12 +9,12 @@ export type RequestBody<T extends NonNullable<Request['body']>> =
 
 export type PostType = 'title' | 'body' | 'commentAll' | 'commentPos' | 'commentNeu' | 'commentNeg';
 
-export type CorpusRequest = {
+export type ConcordanceRequest = {
   word: string;
   cqlEnable: boolean;
   media: string | null;
   postType: PostType | null;
-  boards: string | null;
+  boards: string[] | null;
   start: string;
   end: string;
   windowSize: string;
@@ -24,10 +24,46 @@ export type CorpusRequest = {
 
 // ------ blacklab types ------
 
-export interface BlacklabResponse {
+export type BlacklabErrorResponse = {
+  error: { code: string; message: string };
+};
+
+export type Boards = {
+  indexName: string;
+  fieldName: string;
+  isAnnotatedField: boolean;
+  displayName: string;
+  description: string;
+  uiType: string;
+  type: string;
+  analyzer: string;
+  unknownCondition: string;
+  unknownValue: string;
+  displayValues: { [key: string]: any };
+  fieldValues: { [key: string]: number };
+  valueListComplete: boolean;
+};
+
+export interface ConcordanceResponse {
   summary: Summary;
   hits: Hit[] | [];
   docInfos: DocInfos | {};
+}
+
+export interface DocInfos {
+  [key: string]: DocInfo;
+}
+
+export interface DocInfo {
+  fromInputFile: string[];
+  year: string[];
+  author: string[];
+  media: string[];
+  title: string[];
+  docId: string[];
+  board: string[];
+  lengthInTokens: number;
+  mayView: boolean;
 }
 
 export interface Hit {
@@ -43,19 +79,6 @@ export interface HitData {
   punct: string[];
   pos: string[];
   word: string[];
-}
-
-export interface DocInfos {
-  [key: string]: {
-    fromInputFile: string[];
-    year: string[];
-    author: string[];
-    media: string[];
-    doc_id: string[];
-    board: string[];
-    lengthInTokens: number;
-    mayView: boolean;
-  };
 }
 
 export interface Summary {
@@ -88,9 +111,10 @@ export interface DocFields {
 export interface MetadataFieldDisplayNames {
   author: string;
   board: string;
-  doc_id: string;
+  docId: string;
   fromInputFile: string;
   media: string;
+  title: string;
   year: string;
 }
 
@@ -102,19 +126,3 @@ export interface SearchParam {
   patt: string;
   wordsaroundhit: string;
 }
-
-export type Boards = {
-  indexName: string;
-  fieldName: string;
-  isAnnotatedField: boolean;
-  displayName: string;
-  description: string;
-  uiType: string;
-  type: string;
-  analyzer: string;
-  unknownCondition: string;
-  unknownValue: string;
-  displayValues: { [key: string]: any };
-  fieldValues: { [key: string]: number };
-  valueListComplete: boolean;
-};
