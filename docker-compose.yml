@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+    depends_on:
+      blacklab:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    links:
+      - redis
+      - blacklab
+    restart: always
+    command: >
+      bash -c "export REDIS_URL=\"redis://$$(dig +short redis):6379\" &&
+               pnpm pm2-runtime ./deployment/ecosystem.config.json
+              "
+
+  client:
+    stdin_open: true
+    build: ../ptt-dcard-corpus-frontend
+    links:
+      - api
+    depends_on:
+      - api
+    command: bash -c "pnpm pm2-runtime ./deployment/ecosystem.config.json"
+
+  blacklab:
+    build:
+      context: ./blacklab
+      dockerfile: Dockerfile
+      target: server
+
+    volumes:
+      - ./blacklab/blacklab-indexes:/data/blacklab/indexes
+      - ./blacklab/server/conf/server.xml:/usr/local/tomcat/conf/server.xml
+
+  blacklab-indexer:
+    build:
+      context: ./blacklab
+      dockerfile: Dockerfile
+      target: indexer
+
+    volumes:
+      - ./blacklab/indexer/tei-data:/indexer/tei-data
+      - ./blacklab/blacklab-indexes:/indexer/blacklab-indexes
+
+    command: bash -c "bash indexer.sh"
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - 6378:6379
+    healthcheck:
+      test: 'redis-cli ping'
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  nginx:
+    image: 'nginx:stable'
+    depends_on:
+      - api
+      - blacklab
+    links:
+      - api
+      - blacklab
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - './deployment/nginx.conf:/etc/nginx/nginx.conf'
