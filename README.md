@@ -2,7 +2,6 @@
 
 ## **Overview of the Architecture**
 
-
 ```mermaid 
 flowchart LR
 subgraph Internet
@@ -37,6 +36,9 @@ subgraph DOCKER [Docker]
 end
 ``` 
 
+The user only needs to put the tei files into `corpus-backend/blacklab/indexer/tei-data/` and it will be automatically written into the database by the pre-written script `indexer.sh` when running docker-compose.
+
+> We assume here that you are familiar with the BlackLab indexing process; see [indexing with BlackLab](https://inl.github.io/BlackLab/indexing-with-blacklab.html) to learn more.
 
 ## **Setup**
 ### 1. Download the both frontend and backend projects: 
