@@ -20,7 +20,7 @@ services:
 
   client:
     stdin_open: true
-    build: ../ptt-dcard-corpus-frontend
+    build: ../corpus-frontend
     links:
       - api
     depends_on:
